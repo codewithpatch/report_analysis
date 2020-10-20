@@ -2,11 +2,11 @@
 Analyze Team Reports for audit
 
 ## Table of Contents
-[Setting Environment Variables](#setting-up-environment)
-[Running the Script](#running-the-script)
-[Implementation](#implementation)
-[Setting Up settings.py](#setting-up-settingspy)
-[Update Date of Run](#update-date-of-run)
+1. [Setting Environment Variables](#setting-up-environment)
+2. [Running the Script](#running-the-script)
+3. [Implementation](#implementation)
+    1. [Setting Up settings.py](#setting-up-settingspy)
+        1. [Update Date of Run](#update-date-of-run)
 
 
 
