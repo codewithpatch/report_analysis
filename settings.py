@@ -38,21 +38,22 @@ REPORTS = {
     'ExceptionRecords': 1,
     'Matched': 0,
     'MISMATCH': 0,
-    'MissingInMX': 0,
+    'MissingInMX': 1,
     'MissingInSAA': 0,
-    'UnclassifiedException': 0
+    'UnclassifiedException': 0,
 }
 
 ROOT_DIR = os.path.dirname(__file__)
-SRC_DIR = os.path.join(ROOT_DIR, 'src')
+SRC_DIR = os.path.join(ROOT_DIR, 'src')  # Change this to Network drive path
 
-# TEAMS DIRECTORY
-BONDS_DIR = os.path.join(SRC_DIR, 'BONDS')
-EQD_STRUCT_DIR = os.path.join(SRC_DIR, 'EQD STRUCT')
-FXMM_DIR = os.path.join(SRC_DIR, 'FXMM')
-MASTER_DIR = os.path.join(SRC_DIR, 'MASTER')
-
-TEAMS = ['BONDS', 'EQD STRUCT', 'FXMM']
+TEAMS = ['BONDS', 'EQD STRUCT', 'FXMM', 'FUNDING']
 
 # OUTPUT DIRECTORY
 OUT_DIR = os.path.join(ROOT_DIR, 'output')
+
+
+# TEAMS DIRECTORY - NOT USED
+# BONDS_DIR = os.path.join(SRC_DIR, 'BONDS')
+# EQD_STRUCT_DIR = os.path.join(SRC_DIR, 'EQD STRUCT')
+# FXMM_DIR = os.path.join(SRC_DIR, 'FXMM')
+# MASTER_DIR = os.path.join(SRC_DIR, 'MASTER')
