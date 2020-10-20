@@ -14,6 +14,8 @@ class MissingInMXPipeline(ReportReader):
         self.master_df['Team'] = np.nan
         self.master_df['Comments'] = np.nan
 
+        self.funding_df = self.read_report(team='FUNDING', any_file=True)
+
     @property
     def no_comment_df(self):
         return generate_no_comment_df(self.master_df)
@@ -36,6 +38,14 @@ class MissingInMXPipeline(ReportReader):
             'CCY': df['CCY'],
             'Amount': df['Amount']
         }
+
+        # Look up if df['SAA Ref'] has a match in funding_df['Message Reference']
+        # Returns true if match is found else false
+        is_funding = not self.funding_df.loc[self.funding_df['Message Reference'] == df['SAA Ref']].empty
+        if is_funding:
+            df['Comments'] = 'Funding'
+            return df
+
         df['Comments'] = generate(df=self.consolidated_report, column='Comments', **criteria)
 
         return df
