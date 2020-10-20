@@ -81,3 +81,5 @@ class MissingInSaaPipeline(ReportReader):
 
         if result_df.item().lower() == 'reversal':
             return True
+
+        return False
