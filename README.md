@@ -2,4 +2,4 @@
 Analyze Team Reports for audit
 
 ## Table of Contents
-[TOC]
+[[_TOC_]]
