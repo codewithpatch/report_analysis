@@ -1,13 +1,25 @@
-import logging
-import os
-from pathlib import Path
-
-import pandas as pd
-from pandas import DataFrame
-
-from settings import TEAMS, SRC_DIR, REPORTS
-from utils import ReportReader
-
+from pipelines.exception_records import ExceptionRecordsPipeline
+from pipelines.matched import MatchedPipeline
+from pipelines.mismatch import MismatchPipeline
+from pipelines.mx import MissingInMXPipeline
+from pipelines.saa import MissingInSaaPipeline
+from pipelines.unclassified_exception import UnclassifiedExceptionPipeline
 
 if __name__ == '__main__':
-    reader = ReportReader('ExceptionRecords')
+    pipes = [
+        ExceptionRecordsPipeline,
+        MismatchPipeline,
+        UnclassifiedExceptionPipeline,
+        MatchedPipeline,
+        MissingInSaaPipeline,
+        MissingInMXPipeline
+    ]
+    # reader = ReportReader('ExceptionRecords')
+
+    for PipeClass in pipes:
+        if PipeClass.report != 'MissingInMX':
+            continue
+
+        pipeline = PipeClass()
+        pipeline.process_df()
+        pipeline.end_process()
