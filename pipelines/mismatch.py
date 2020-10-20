@@ -6,7 +6,7 @@ import pandas as pd
 from pandas import DataFrame
 
 from pipelines import generate, generate_team, write_to_excel, generate_no_comment_df, generate_output
-from settings import OUT_DIR
+from settings import OUT_DIR, DATE_TO_PROCESS
 from utils import ReportReader
 
 
@@ -15,6 +15,7 @@ class MismatchPipeline(ReportReader):
 
     def __init__(self):
         super(MismatchPipeline, self).__init__(report=self.report)
+        self.consolidated_report = self.__consolidate_report()
         self.master_df = self.master_report
         self.master_df['Team'] = np.nan
         self.master_df['Comments'] = np.nan
@@ -49,10 +50,15 @@ class MismatchPipeline(ReportReader):
             try:
                 next_index = with_si.iloc[i+1].name
             except IndexError:
-                yield df[index::]
+                next_index = None
                 break
 
             block_df = df[index:next_index]
+
+            # Process only all dates equal to process_date
+            if block_df['Value Date'].iloc[0] == DATE_TO_PROCESS:
+                continue
+
             yield block_df
 
             i += 1
@@ -93,3 +99,10 @@ class MismatchPipeline(ReportReader):
         df['Team'] = generate(df=self.consolidated_report, column='Team', **criteria)
 
         return df
+
+    def __consolidate_report(self) -> DataFrame:
+        df = self.consolidated_report
+        result_df = pd.DataFrame()
+        for block_df in self.__df_block(df):
+            result_df = pd.concat([result_df, block_df])
+        return result_df
