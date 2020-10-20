@@ -15,11 +15,12 @@ class MatchedPipeline(ReportReader):
 
     @property
     def no_comment_df(self):
-        return self.master_df.loc[
-            (self.master_df['Product Category'] == 'FXMM') &
-            (self.master_df['Comments'].isnull()) & (
-                (self.master_df['Trade Id'].isnull()) |
-                (self.master_df['Trade Id'] == 0)
+        df = self.master_df
+        return df.loc[
+            (df['Team'] == 'FXMM') &
+            (df['Comments'].isnull()) & (
+                (df['Trade Id'] == 0) |
+                (df['Trade Id'].isnull())
             )
         ]
 
