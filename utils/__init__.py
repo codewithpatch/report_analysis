@@ -17,7 +17,8 @@ class ReportReader:
 
     @property
     def master_report(self):
-        report_df = self.read_report('MASTER')
+        folder_name = 'MASTER'
+        report_df = self.read_report(folder_name)
         report_df['Value Date'] = report_df['Value Date'].apply(datetime_to_date)
         if self.report != 'MISMATCH':
             report_df = report_df.loc[report_df['Value Date'] == DATE_TO_PROCESS]
@@ -52,6 +53,9 @@ class ReportReader:
         report_df = pd.read_excel(report.filepath)
 
         return report_df
+# Usage
+# report = ReportReader(report='ReportName')
+# report.read_report(team='TEAM1')
 
 
 class ReportPath:
@@ -83,13 +87,10 @@ class ReportPath:
                                     f" - Team '{self.team}'. "
                                     f"Check Directory: '{self.dir}'.")
 
-        return files[0]
+        return os.path.basename(files[0])
 
     @property
     def dir(self):
-        if self.team == 'MASTER':
-            return os.path.join(SRC_DIR, self.team)
-
         folder_date = DATE_TO_PROCESS.strftime('%y%m%d')
         return os.path.join(SRC_DIR, self.team, folder_date)
 
@@ -101,10 +102,16 @@ class ReportPath:
         report_split = list(self.report)
         report_glob = map(lambda e: f"[{e.upper()}{e.lower()}]", report_split)
         report_glob = str().join(report_glob)
-        if self.team == 'MASTER':
-            return f'{report_glob}-{self.process_date}*.xlsx'
-        else:
-            return f'{report_glob}*.xlsx'
+
+        # if self.team == 'MASTER':
+        #     # return f'{report_glob}-{self.process_date}*.xlsx'
+        #     return f'{report_glob}*.xlsx'
+        # else:
+        #     return f'{report_glob}*.xlsx'
+
+        return f'{report_glob}*.xlsx'
+# Usage
+# rpath = ReportPath(report='ExceptionRecords', team='BONDS')
 
 
 def datetime_to_date(value):
