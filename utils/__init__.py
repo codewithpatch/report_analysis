@@ -1,13 +1,11 @@
 import glob
 import logging
 import os
-from datetime import timedelta, date
-from pathlib import Path
 
 import pandas as pd
 from pandas import DataFrame
 
-from settings import SRC_DIR, TEAMS, DATE
+from settings import SRC_DIR, TEAMS, DATE_TO_PROCESS
 
 
 class ReportReader:
@@ -19,12 +17,20 @@ class ReportReader:
 
     @property
     def master_report(self):
-        return self.read_report('MASTER')
+        report_df = self.read_report('MASTER')
+        report_df['Value Date'] = report_df['Value Date'].apply(datetime_to_date)
+        if self.report != 'MISMATCH':
+            report_df = report_df.loc[report_df['Value Date'] == DATE_TO_PROCESS]
+
+        return report_df
 
     def __consolidate_report(self) -> DataFrame:
         logging.info(f"Consolidating '{self.report}' report for {self.teams}.")
         consolidated_df = pd.DataFrame()
         for team in self.teams:
+            if team.lower() == 'funding':
+                continue
+
             logging.info(f"Reading '{self.report}' for '{team}'...")
             report_df = self.read_report(team)
 
@@ -35,29 +41,38 @@ class ReportReader:
 
             consolidated_df = pd.concat([consolidated_df, report_df])
 
+        consolidated_df['Value Date'] = consolidated_df['Value Date'].apply(datetime_to_date)
+        if self.report != 'MISMATCH':
+            consolidated_df = consolidated_df.loc[consolidated_df['Value Date'] == DATE_TO_PROCESS]
+
         return consolidated_df
 
-    def read_report(self, team) -> DataFrame:
-        report = ReportPath(report=self.report, team=team)
+    def read_report(self, team, any_file=None, filename=None) -> DataFrame:
+        report = ReportPath(report=self.report, team=team, any_file=any_file, filename=filename)
         report_df = pd.read_excel(report.filepath)
 
         return report_df
 
 
 class ReportPath:
-    def __init__(self, report, team):
+
+    def __init__(self, report, team, any_file=False, filename=None):
         self.report = report
         self.team = team
+        self.any_file = any_file
+        self._filename = filename
 
         # date format ex: 16 Oct 2020
-        self.process_date = prev_weekday(DATE).strftime('%d %b %Y')
+        self.process_date = DATE_TO_PROCESS.strftime('%d %b %Y')
 
-        self.dir = os.path.join(SRC_DIR, self.team)
         self.glob_path = os.path.join(self.dir, self.glob_filename)
         self.filepath = os.path.join(self.dir, self.filename)
 
     @property
     def filename(self):
+        if self._filename:
+            return self._filename
+
         files = glob.glob(self.glob_path)
         if len(files) > 1:
             raise FileExistsError(f"Two files found for Report '{self.report}' - Team '{self.team}'. "
@@ -71,7 +86,18 @@ class ReportPath:
         return files[0]
 
     @property
+    def dir(self):
+        if self.team == 'MASTER':
+            return os.path.join(SRC_DIR, self.team)
+
+        folder_date = DATE_TO_PROCESS.strftime('%y%m%d')
+        return os.path.join(SRC_DIR, self.team, folder_date)
+
+    @property
     def glob_filename(self):
+        if self.any_file:
+            return '[!~$]*.xlsx'
+
         report_split = list(self.report)
         report_glob = map(lambda e: f"[{e.upper()}{e.lower()}]", report_split)
         report_glob = str().join(report_glob)
@@ -81,10 +107,9 @@ class ReportPath:
             return f'{report_glob}*.xlsx'
 
 
-def prev_weekday(adate: date) -> date:
-    adate -= timedelta(days=1)
-    while adate.weekday() > 4:  # Mon-Fri are 0-4
-        adate -= timedelta(days=1)
-    return adate
-
-
+def datetime_to_date(value):
+    try:
+        # format date 2020-10-15 or date(2020, 10, 15)
+        return value.date()
+    except AttributeError:
+        return value
