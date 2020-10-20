@@ -76,6 +76,6 @@ class ExceptionRecordsPipeline(ReportReader):
             trade_id = self.master_df.iloc[index+1]['Trade ID']
             team = generate_team(df=self.consolidated_report, key='Trade ID', value=trade_id)
 
-        df['team'] = team
+        df['Team'] = team
 
         return df
