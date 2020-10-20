@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 from pandas import DataFrame
 
-from settings import OUT_DIR
+from settings import OUT_DIR, DATE, DATE_TO_PROCESS
 
 
 def write_to_excel(df, path):
@@ -50,10 +50,13 @@ def generate_no_comment_df(df: DataFrame):
 
 
 def generate_output(report_name: str, conso_df: DataFrame, no_comment_df: DataFrame):
-    consolidated_fn = 'consolidated.xlsx'
+    file_date = DATE_TO_PROCESS.strftime('%d%b%Y')
+    outfile_prefix = f'{report_name}_{file_date}'
+
+    consolidated_fn = f'{outfile_prefix}_consolidated.xlsx'
     conso_filepath = os.path.join(OUT_DIR, report_name, consolidated_fn)
 
-    no_comment_fn = 'no_comments.xlsx'
+    no_comment_fn = f'{outfile_prefix}_no_comments.xlsx'
     no_comment_filepath = os.path.join(OUT_DIR, report_name, no_comment_fn)
 
     write_to_excel(df=conso_df, path=conso_filepath)
