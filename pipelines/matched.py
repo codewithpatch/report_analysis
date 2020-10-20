@@ -44,6 +44,8 @@ class MatchedPipeline(ReportReader):
         }
         if df['Team'] == 'FXMM':
             df['Comments'] = generate(df=self.consolidated_report, column='Comments', **criteria)
+        else:
+            df['Comments'] = 'MATCHED'
 
         return df
 
