@@ -16,6 +16,9 @@ Analyze Team Reports for audit
     3. [ReportReader Class](#reportreader-class)
         1. [Usage](#usage)
         2. [Attributes and Methods of ReportPath Class](#attributes-and-methods-of-reportpath-class)
+    4. [ReportPath Class](#reportpath-class)
+        1. [Usage](#usage)
+        2. [Attributes and Methods of ReportPath Class](#attributes-and-methods-of-reportpath-class)
 
 
 <a name="environment"></a>
