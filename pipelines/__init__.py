@@ -42,6 +42,9 @@ def generate_team(df: DataFrame, key: str, value: Any):
 
 
 def generate_no_comment_df(df: DataFrame):
+    if df.empty:
+        return df
+
     return df.loc[
         (df['Comments'].isnull()) |
         (df['Comments'].str.lower().str.startswith('belongs to')) |
