@@ -309,7 +309,6 @@ ReportPath class is going to look for the specific excel file that you will need
     ```
    
 3. `self.filepath` - returns the absolute path of our file
-    - you can use this on `read_report` method of the [ReportReader Class](#reportreader-class).
    ```python
    filepath = rpath.filepath
    # Output: '/Users/pluggle/Documents/Github/report_analysis/src/BONDS/201016/MissingInMX.xlsx'
