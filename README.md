@@ -299,23 +299,27 @@ ReportPath class is going to look for the specific excel file that you will need
     adate = rpath.process_date # Example result: '16 Oct 2020'
     ```
    
-2. `self.glob_path` - returns the glob path that you can use for `glob.glob(path)` method of finding filenames in directory.
+2. `self.glob_path` - returns the glob path that you can use for `glob.glob(path)` method of finding filenames in directory. The glob is **CASE INSENSITIVE** when looking for excel files.
     ```python
-    glob_path = rpath.glob_path
+    glob_path = rpath.glob_path 
+   # Output: '/Users/pluggle/Documents/Github/report_analysis/src/BONDS/201016/[Mm][Ii][Ss][Ss][Ii][Nn][Gg][Ii][Nn][Mm][Xx]*.xlsx'
     ```
    
 3. `self.filepath` - returns the absolute path of our file
     - you can use this on `read_report` method of the [ReportReader Class](#reportreader-class).
    ```python
    filepath = rpath.filepath
+   # Output: '/Users/pluggle/Documents/Github/report_analysis/src/BONDS/201016/MissingInMX.xlsx'
    ```
 
 4. `self.dir` - returns the directory of `report` and `team` that you passed in.
     ```python
    directory = rpath.dir
+   # Output: '/Users/pluggle/Documents/Github/report_analysis/src/BONDS/201016'
    ```
 
-5. `self.glob_filename` - returns the filename parth of your `globpath`
+5. `self.glob_filename` - returns the filename parth of your `globpath`. Again, this glob filename is **CASE INSENSITIVE** in looking for filenames of the excel files.
     ```python
    glob_fn = rpath.glob_filename
+   # Output: '[Mm][Ii][Ss][Ss][Ii][Nn][Gg][Ii][Nn][Mm][Xx]*.xlsx'
    ```
