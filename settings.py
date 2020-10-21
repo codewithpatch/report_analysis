@@ -10,8 +10,8 @@ logging.basicConfig(
 
 # To change date to specific date
 # Use this format -> date(2012, 8, 20)
-# DATE = date.today()
-DATE = date(2020, 10, 19)
+DATE = date.today()
+# DATE = date(2020, 10, 19)
 
 
 def prev_weekday(adate: date) -> date:
@@ -33,7 +33,7 @@ RUN_ALL
         1. If toggle is 1 -> Run report analysis
         2. If toggle is 0 -> Skip running report analysis
 '''
-RUN_ALL = False
+RUN_ALL = True
 REPORTS = {
     'ExceptionRecords': 1,
     'Matched': 0,
@@ -43,7 +43,7 @@ REPORTS = {
     'UnclassifiedException': 0,
 }
 
-ROOT_DIR = os.path.dirname(__file__)
+ROOT_DIR = os.path.dirname(__file__) # DO NOT CHANGE
 SRC_DIR = os.path.join(ROOT_DIR, 'src')  # Change this to Network drive path
 
 TEAMS = ['BONDS', 'EQD STRUCT', 'FXMM', 'FUNDING']
